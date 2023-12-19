@@ -1,76 +1,44 @@
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
-from functions import *
+from functions.functions import *
 
-# Function definitions (including the ones provided earlier)
 
-functions = [
-    ackley,
-    sphere,
-    rosenbrock,
-    griewank,
-    michalewicz,
-    rastrigin,
-    schwefel,
-    bohachevsky,
-    zakharov,
-    styblinski_tang,
-    himmelblau,
-    easom,
-    schaffer_n2,
-    schaffer_n4,
-    six_hump_camel,
-    schwefel_problem_2_21,
-    rotated_hyper_ellipsoid,
-    generalized_penalized_1,
-    generalized_penalized_2,
-    modified_schwefel_problem_1_2,
-    pinter_function_8,
-    alpine_function,
-    quartic_function,
-    sum_of_different_powers,
-    salomon_function
-]
+
+# Create a folder for charts if it doesn't exist
+if not os.path.exists("charts"):
+    os.makedirs("charts")
 
 # Open a single text file for writing
-with open("optimization_functions_combined.txt", "w") as file:
-    for i, func in enumerate(functions, start=1):
-        info = generate_mathematical_function_info(func) 
+for i, func in enumerate(functions_list, start=1):
+    info = generate_mathematical_function_info(func) 
         # Generate sample points
-        x = np.linspace(-100, 100, 400)
-        y = np.linspace(-100, 100, 400)
-        X, Y = np.meshgrid(x, y)
-        Z = func(np.array([X, Y]))
+    # Create a meshgrid for plotting
+    x = np.linspace(-10, 10, 100)
+    y = np.linspace(-10, 10, 100)
+    X, Y = np.meshgrid(x, y)
+    Z = np.array([[func(np.array([xi, yi])) for xi, yi in zip(x_row, y_row)] for x_row, y_row in zip(X, Y)])
 
-        # Create 2D plot
-        fig = plt.figure(figsize=(12, 4))
-        plt.subplot(1, 2, 1)
-        plt.contourf(X, Y, Z, levels=50, cmap="viridis")
-        plt.title(f"{info['name']} - 2D Plot")
-        plt.xlabel("X-axis")
-        plt.ylabel("Y-axis")
-        plt.colorbar()
+    # Plot the 2D chart
+    plt.subplot(1, 2, 1)
+    plt.plot(x, Z[50, :], color='blue')  # Adjusted y index to plot, you can change it as needed
+    plt.title('2D Plot')
 
-        # Create 3D plot
-        ax = fig.add_subplot(1, 2, 2, projection='3d')
-        surf = ax.plot_surface(X, Y, Z, cmap=cm.viridis, edgecolors='k', linewidth=0.5)
-        ax.set_title(f"{info['name']} - 3D Plot")
-        ax.set_xlabel("X-axis")
-        ax.set_ylabel("Y-axis")
-        plt.tight_layout()
+    # Plot the 3D chart
+    fig = plt.figure()
+    ax_3d = fig.add_subplot(111, projection='3d')
+    ax_3d.plot_surface(X, Y, Z, cmap='viridis')
+    ax_3d.set_title('3D Plot')
 
-        # Save the combined chart
-        plt.savefig(f"function_{i}_combined.png")
-        plt.close()
-
-        # Write information to the text file
-        file.write(f"Function {i}\n")
-        file.write(f"Name: {info['name']}\n")
-        file.write("Mathematical Formula:\n")
-        file.write(f"{info['formula']}\n\n")
-        file.write(f"Combined Plot: function_{i}_combined.png\n\n")
+    # Adjust layout and save the figure to the 'charts' folder
+    output_folder = 'charts'
+    os.makedirs(output_folder, exist_ok=True)  # Create the 'charts' folder if it doesn't exist
+    output_path = os.path.join(output_folder, f'{info["name"]}.png')
+    plt.tight_layout()
+    plt.savefig(output_path)
+    plt.close()
 
 # Print success message
 print("Plots and information saved to optimization_functions_combined.txt.")

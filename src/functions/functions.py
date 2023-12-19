@@ -101,11 +101,30 @@ def v(x, a, k, m):
 def generate_mathematical_function_info(fun):
     return {"name":fun.__name__,"evaluate":fun}
 
-# # Example usage
-# n_dimensions = 2
-# x_example = np.random.uniform(-100, 100, n_dimensions)
-
-# print("Ackley:", ackley(x_example))
-# print("Sphere:", sphere(x_example))
-# print("Rosenbrock:", rosenbrock(x_example))
-# ... (test other functions as needed)
+functions_list = [
+    ackley,
+    sphere,
+    rosenbrock,
+    griewank,
+    michalewicz,
+    rastrigin,
+    schwefel,
+    bohachevsky,
+    zakharov,
+    styblinski_tang,
+    himmelblau,
+    easom,
+    schaffer_n2,
+    schaffer_n4,
+    six_hump_camel,
+    schwefel_problem_2_21,
+    rotated_hyper_ellipsoid,
+    generalized_penalized_1,
+    generalized_penalized_2,
+    modified_schwefel_problem_1_2,
+    pinter_function_8,
+    alpine_function,
+    quartic_function,
+    sum_of_different_powers,
+    salomon_function
+]
