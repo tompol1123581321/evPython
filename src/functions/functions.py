@@ -1,3 +1,4 @@
+import math
 import numpy as np
 from math import cos, sin, exp, sqrt, pi
 
@@ -22,8 +23,12 @@ def rastrigin(x):
 def schwefel(x):
     return 418.9829 * len(x) - np.sum(x * np.sin(np.sqrt(np.abs(x))))
 
-def bohachevsky(x):
-    return np.sum(x**2 + 2 * x[1:]**2 - 0.3 * np.cos(3 * pi * x[:-1]) - 0.4 * np.cos(4 * pi * x[1:]) + 0.7)
+def multimodal_polynomial_mixture(x):
+    n = len(x)
+    result = 0
+    for i in range(n):
+        result += x[i]**2 * (n - i)
+    return result
 
 def zakharov(x):
     return np.sum(x**2) + (0.5 * np.sum(np.arange(1, len(x) + 1) * x))**2 + (0.5 * np.sum(np.arange(1, len(x) + 1) * x**2))**4
@@ -31,8 +36,13 @@ def zakharov(x):
 def styblinski_tang(x):
     return 0.5 * np.sum(x**4 - 16 * x**2 + 5 * x)
 
-def himmelblau(x):
-    return (x[0]**2 + x[1] - 11)**2 + (x[0] + x[1]**2 - 7)**2
+
+def multimodal_sine_cosine_mixture(x):
+    n = len(x)
+    result = 0
+    for i in range(n):
+        result += np.sin(x[i]) * np.cos(x[i])
+    return -result
 
 def easom(x):
     return -cos(x[0]) * cos(x[1]) * exp(-((x[0] - pi)**2 + (x[1] - pi)**2))
@@ -69,15 +79,23 @@ def generalized_penalized_2(x):
     term4 = np.sum(u(x, 5, 100, 4) + v(x, 5, 100, 4))
     return 0.5 * (term1 + term2 + term3) + 0.5 * term4
 
-def modified_schwefel_problem_1_2(x):
-    term1 = np.sum((x)**2)
-    term2 = np.sum(np.sin(np.sqrt(np.abs(x))) / np.sqrt(np.abs(x)))
-    return term1 + term2
+def xin_she_yang__fnc(x):
+    var1 = 0
+    var2 = 0
+    for i in x:
+        var1 += abs(i)
+        var2 += math.sin(i ** 2)
+    return var1 * math.exp(-var2)
 
-def pinter_function_8(x):
-    term1 = np.sum(10**(4 * np.arange(len(x))) * (x - x[0]**2 / x))
-    term2 = np.sum((1 - x)**2)
-    return term1 + term2
+def happy_cat(x):
+    var1 = 0
+    var2 = 0
+    D = len(x)
+    for i in x:
+        var1 += i ** 2
+        var2 += i
+    return abs(var1 - D) ** (1 / 4) + (0.5 * var1 + var2) / D + 0.5
+
 
 def alpine_function(x):
     return np.sum(np.abs(x * np.sin(x) + 0.1 * x))
@@ -109,10 +127,10 @@ functions_list = [
     michalewicz,
     rastrigin,
     schwefel,
-    bohachevsky,
+    multimodal_polynomial_mixture,
     zakharov,
     styblinski_tang,
-    himmelblau,
+    multimodal_sine_cosine_mixture,
     easom,
     schaffer_n2,
     schaffer_n4,
@@ -121,8 +139,8 @@ functions_list = [
     rotated_hyper_ellipsoid,
     generalized_penalized_1,
     generalized_penalized_2,
-    modified_schwefel_problem_1_2,
-    pinter_function_8,
+    happy_cat,
+    xin_she_yang__fnc,
     alpine_function,
     quartic_function,
     sum_of_different_powers,
