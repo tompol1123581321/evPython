@@ -1,5 +1,8 @@
 import random
 import numpy as np
+from src.algs.helpers.reflectionHandler import handle_possible_collision
+from src.algs.helpers.contants import MIN,MAX
+
 
 from  src.algs.helpers.Particle import Particle
 
@@ -31,6 +34,6 @@ def pso_alg(obj_func, dim, num_iterations):
                                  c1 * r1 * (particle.personal_best_position - particle.position) +
                                  c2 * r2 * (global_best_position - particle.position))
             
-            particle.position += particle.velocity
+            particle.position = handle_possible_collision(particle.position,particle.velocity,MIN,MAX)
 
     return global_best_fitness

@@ -5,4 +5,4 @@ from src.algs.soma_all_to_all import soma_all_to_all_alg
 from src.algs.soma_all_to_one import soma_all_to_one_alg
 
 
-alg_list = [de_best_one_alg,de_rand_one_alg,pso_alg,soma_all_to_all_alg,soma_all_to_one_alg]
+alg_list = [pso_alg]
